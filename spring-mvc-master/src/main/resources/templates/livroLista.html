@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Lista de Livros</title>
     <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
     <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
     <link th:href="@{/css/style.css}" rel="stylesheet" />
+    <script th:src="@{/js/scrip.js}" defer></script>
 </head>
 <body>
     <div th:insert="~{fragments/header :: cabecalho}"></div>
@@ -24,10 +25,32 @@
                 <tr th:each="livro: ${listaLivros}">
                     <td th:text="${livro.id}"> </td>
                     <td th:text="${livro.titulo}"> </td>
-                    <td>Ver</td>
+                    <td>
+                        <button th:attr="onclick=\|showModal('infoModal' + ${livro.id})">
+                            Ver
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>
+        <div th:each="livro:${listaLivros}" th:attr="id=${'infoModal' + livro.id}"
+        style="display:none">
+            <p>
+                ID:<span th:text="${livro.id}"></span><br>
+                Titulo:<span th:text="${livro.titulo}"></span><br>
+                Autor:<span th:text="${livro.autor}"></span><br>
+                Categoria:<span th:text="${livro.categoria.descricao}"></span><br>
+                Editora:<span th:text="${livro.editora}"></span><br>
+                Preco:<span th:text="${livro.preco}"></span><br>
+                ISBN:<span th:text="${livro.isbn}"></span><br>
+                Data de Publicacao:<span th:text="${#temporals.format(livro.dataPublicacao, 'dd/MM/yyyy)}"></span><br>
+
+                Editar | Deletar
+            </p>
+            <button th:attr="onclick=|hideModel('infoModal' + ${livro.id})|"
+                Fechar
+            </button>
+        </div>
     </div>
     <div th:include="~{fragments/footer :: rodape}"></div>
 </body>
